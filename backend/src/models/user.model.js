@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema(
         required: true,
       },
     },
+    isAdmin: {
+      type: Boolean,
+      required: true,
+      default: false,
+    },
   },
   { timestamps: true }
 );
@@ -44,7 +49,7 @@ userSchema.isMatchPassword = async function (enteredPassword) {
 
 userSchema.generateAccessToken = async function () {
   const token = jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
+    expiresIn: "30d",
   });
   return token;
 };

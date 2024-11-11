@@ -87,7 +87,6 @@ const loginUser = async (req, res, next) => {
 // @ACCESS: private
 const logoutUser = async (req, res, next) => {
   try {
-    const user = req.user;
     res.clearCookie("token");
 
     return res.status(StatusCodes.OK).json({

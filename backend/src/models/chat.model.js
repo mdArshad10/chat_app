@@ -6,13 +6,9 @@ const chatSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    groupChat: {
+    isGroupChat: {
       type: Boolean,
       default: false,
-    },
-    creator: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
     },
     members: [
       {
@@ -20,6 +16,14 @@ const chatSchema = new mongoose.Schema(
         ref: "User",
       },
     ],
+    latestMessage: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Message",
+    },
+    groupAdmin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true }
 );
