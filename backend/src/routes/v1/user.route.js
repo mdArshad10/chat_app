@@ -9,9 +9,9 @@ const router = Router();
 router
   .route("/new")
   .post(
-    userValidatorRules.createUser,
-    validator,
-    upload.single("avatar"),
+    // userValidatorRules.createUser,
+    // validator,
+    // upload.single("avatar"),
     createUser
   );
 

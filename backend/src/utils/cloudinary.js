@@ -14,7 +14,7 @@ cloudinary.config({
 
 export const fileUploadInCloudinary = async (fileUrl) => {
   try {
-    if (!fileUrl) return { success: false, message: "file is url is empty" };
+    if (!fileUrl) return null;
     const info = await cloudinary.uploader.upload(fileUrl, {
       resource_type: "auto",
       folder: "chatApp",
@@ -27,6 +27,6 @@ export const fileUploadInCloudinary = async (fileUrl) => {
     fs.unlink(fileUrl);
     console.log("something is wrong in file uploading");
     console.log(error);
-    return { success: false, message: error.message };
+    return null;
   }
 };

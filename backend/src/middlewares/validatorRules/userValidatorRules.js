@@ -19,7 +19,9 @@ export const userValidatorRules = {
       .withMessage("name must be between 3 and 20 characters long")
       .custom(async (value) => {
         const user = await User.findOne({ username: value });
-        if (user) throw new Error("username already exists");
+        if (user) {
+          throw new Error("username already exists");
+        }
       })
       .escape(),
 
