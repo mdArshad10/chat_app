@@ -13,7 +13,7 @@ const sendMessage = AsyncHandler(async (req, res, next) => {
   // 1. ChatId is required
   // 2. Message content is required
   // 3. SenderId is required
-  const { chatId, messageContent } = req.body;
+  const { chatId, messageContent, senderId } = req.body;
 
   if (!chatId || !messageContent) {
     return next(new ErrorHandler("Invalid data passed into the request"));
@@ -21,25 +21,31 @@ const sendMessage = AsyncHandler(async (req, res, next) => {
 
   const messageDetail = {
     chat: chatId,
-    sender: req.user.id,
+    sender: senderId, // TODO: login user's user id
     content: messageContent,
   };
 
   const newMessage = await Message.create(messageDetail);
 
-  const message = await newMessage
+  const value = newMessage.populated("sender");
+
+  const message = await Message.findById(newMessage._id)
     .populate("sender", "name email username avatar")
     .populate("chat")
-    .execPopulate();
+    .exec();
 
   const allMembers = await User.populate(message, {
     path: "Chat.members",
     select: "name email username avatar",
   });
 
-  const latestMessage = await Chat.findByIdAndUpdate(chatId, {
-    latestMessage: messageContent,
-  });
+  const latestMessage = await Chat.findByIdAndUpdate(
+    chatId,
+    {
+      latestMessage: message,
+    },
+    { new: true }
+  );
   res.status(StatusCodes.CREATED).json({
     success: true,
     message: "Message sent successfully",

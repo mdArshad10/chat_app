@@ -5,29 +5,42 @@ import { AsyncHandler } from "../middlewares/async-handler.js";
 import { ErrorHandler } from "../utils/error.js";
 
 // @DESC: create a new chat
-// @METHOD: [POST ]  /api/v1/chats
+// @METHOD: [POST]  /api/v1/chats
 // @ACCESS: private
 const accessChat = AsyncHandler(async (req, res, next) => {
-  const { userId } = req.body;
+  const { userId, senderId } = req.body;
   if (!userId) {
     return next(
       new ErrorHandler("UserId params is not send with request", StatusCodes.b)
     );
   }
 
+  const newChatForTest = await Chat.find({
+    isGroupChat: false,
+    $and: [
+      {
+        members: { $elemMatch: { $eq: senderId } }, // TODO: login user's user id
+      },
+      {
+        members: { $elemMatch: { $eq: userId } },
+      },
+    ],
+  });
+
   const userChat = await Chat.find({
     isGroupChat: false,
     $and: [
       {
-        members: { $elemMatch: { $eq: req.user._id } },
+        members: { $elemMatch: { $eq: senderId } }, // TODO: login user's user id
       },
       {
-        members: { $elemMatch: { $eg: userId } },
+        members: { $elemMatch: { $eq: userId } },
       },
     ],
   })
-    .populate("user", "-password")
-    .populate("latestMessage");
+    .populate("members", "-password")
+    .populate("latestMessage")
+    .exec();
   const sender = await User.populate(userChat, {
     path: "latestMessage.sender",
     select: "name avatar username email",
@@ -41,7 +54,7 @@ const accessChat = AsyncHandler(async (req, res, next) => {
   } else {
     const chatData = {
       name: "sender",
-      members: [req.user._id, userId],
+      members: [senderId, userId], // TODO: login user's user id
     };
     const newChatCreated = await Chat.create(chatData);
     console.log("the new Chat created");

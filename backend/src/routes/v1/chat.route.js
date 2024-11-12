@@ -10,8 +10,8 @@ import {
 } from "../../controllers/chat.controller.js";
 const router = Router();
 
-// access chats
-// router.route('/').post(accessChat)
+// access chats 
+router.route('/').post(accessChat)
 
 // fetch chat
 // router.route('/').get(fetchChats);

@@ -6,7 +6,7 @@ import {
 
 const router = Router();
 
-// router.route("/").post(sendMessage)
-// router.route("/:chatId").get(allMessages);
+router.route("/").post(sendMessage)
+router.route("/:chatId").get(allMessages);
 
 export default router;
