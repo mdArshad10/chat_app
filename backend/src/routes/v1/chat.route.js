@@ -14,18 +14,18 @@ const router = Router();
 router.route('/').post(accessChat)
 
 // fetch chat
-// router.route('/').get(fetchChats);
+router.route("/").get(fetchChat);
 
 // create group
-// router.route('/group').post(createGroupChat);
+router.route('/group').post(createGroupChat);
 
 // rename group
-// router.route('/group').put(renameGroup);
+router.route("/group").put(renameGroupChat);
 
 //removeFrom group
-// router.route("/groupremove").put(removeFromGroupChat);
+router.route("/groupremove").put(removeUserFromGroupChat);
 
 // add to group
-// router.route("/groupadd").post(addToGroupChat);
+router.route("/groupadd").post(addUserIntoGroupChat);
 
 export default router;

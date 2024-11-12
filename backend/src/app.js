@@ -3,7 +3,8 @@ import helmet from "helmet";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-
+import v1Routes from "./routes/index.js";
+import { ErrorMiddleware } from "./middlewares/error.js";
 
 const app = express();
 
@@ -20,5 +21,14 @@ app.use(
 );
 app.use(cookieParser());
 app.use(morgan("dev"));
+
+app.use("/api", v1Routes);
+app.use(ErrorMiddleware);
+app.use("*", (req, res, next) => {
+  res.status(404).json({
+    success: false,
+    message: "The route is not found",
+  });
+});
 
 export default app;

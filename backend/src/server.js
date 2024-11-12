@@ -1,21 +1,16 @@
 import app from "./app.js";
 import { dbConnection } from "./config/db.js";
 import { PORT } from "./constant.js";
-import v1Routes from "./routes/index.js";
-import { ErrorMiddleware } from "./middlewares/error.js";
 
-// const PORT = 3000;
+import { Server } from "socket.io";
+import { createServer } from "node:http";
 
-app.use("/api", v1Routes);
-app.use(ErrorMiddleware);
-app.use("*", (req, res, next) => {
-  res.status(404).json({
-    success: false,
-    message: "The route is not found",
-  });
-});
+const server = createServer(app);
+const io = new Server(server);
 
-app.listen(PORT, async () => {
+
+server.listen(PORT, async () => {
   await dbConnection();
   console.log(`the server is running at port ${PORT}`);
 });
+
