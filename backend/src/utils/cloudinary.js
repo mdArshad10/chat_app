@@ -20,11 +20,11 @@ export const fileUploadInCloudinary = async (fileUrl) => {
       folder: "chatApp",
     });
     console.log("file upload successfully");
-    fs.unlink(fileUrl);
+    fs.unlinkSync(fileUrl);
     console.log("file is remove");
     return { success: true, public_id: info.public_id, url: info.secure_url };
   } catch (error) {
-    fs.unlink(fileUrl);
+    fs.unlinkSync(fileUrl);
     console.log("something is wrong in file uploading");
     console.log(error);
     return null;

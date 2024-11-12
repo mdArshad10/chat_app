@@ -1,10 +1,9 @@
 import mongoose from "mongoose";
+import { MONGO_URL } from "../constant.js";
 
 export const dbConnection = async () => {
   try {
-    const dbInstance = await mongoose.connect(
-      `mongodb://127.0.0.1:27017/chatApp`
-    );
+    const dbInstance = await mongoose.connect(`${MONGO_URL}/chatApp`);
     console.log(
       `the database is connected successfully at ${dbInstance.connection.port}`
     );

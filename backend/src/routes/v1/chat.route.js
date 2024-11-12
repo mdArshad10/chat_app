@@ -2,10 +2,10 @@ import { Router } from "express";
 import { verifyUser } from "../../middlewares/verify.js";
 import {
   accessChat,
-  addToGroupChat,
+  addUserIntoGroupChat,
   createGroupChat,
   fetchChat,
-  removeFromGroupChat,
+  removeUserFromGroupChat,
   renameGroupChat,
 } from "../../controllers/chat.controller.js";
 const router = Router();

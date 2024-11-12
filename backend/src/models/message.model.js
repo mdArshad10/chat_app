@@ -2,16 +2,17 @@ import mongoose from "mongoose";
 
 const messageSchema = new mongoose.Schema(
   {
-    content: String,
+    content: {
+      type: String,
+      required: true,
+    },
     attachment: [
       {
         public_id: {
           type: String,
-          required: true,
         },
         url: {
           type: String,
-          required: true,
         },
       },
     ],
