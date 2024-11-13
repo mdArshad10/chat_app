@@ -14,3 +14,5 @@ httpServer.listen(PORT, async () => {
   await dbConnection();
   console.log(`the server is running at port ${PORT}`);
 });
+
+export default httpServer;

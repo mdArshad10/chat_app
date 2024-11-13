@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import v1Routes from "./routes/index.js";
 import { ErrorMiddleware } from "./middlewares/error.js";
+import { POSTMAN_API_DOCUMENTATION_URL } from "./constant.js";
 
 const app = express();
 
@@ -22,12 +23,9 @@ app.use(
 app.use(cookieParser());
 app.use(morgan("dev"));
 
-
-app.get("/", (req,res,next)=>{
-  res.status(200).json({
-    message:"welcome to Chat App"
-  })
-})
+app.get("/", (req, res, next) => {
+  res.redirect(POSTMAN_API_DOCUMENTATION_URL);
+});
 app.use("/api", v1Routes);
 app.use(ErrorMiddleware);
 app.use("*", (req, res, next) => {
