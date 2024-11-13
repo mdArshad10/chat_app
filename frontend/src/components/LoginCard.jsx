@@ -15,8 +15,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 
 const schema = yup
   .object({
-    firstName: yup.string().required(),
-    age: yup.number().positive().integer().required(),
+    username: yup.string().required(),
+    password: yup.string().required(),
   })
   .required();
 
@@ -44,18 +44,18 @@ export const LoginCard = () => {
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="space-y-1">
-            <Label htmlFor="username">Username</Label>
+            <Label htmlFor="loginUsername">Email</Label>
             <Input
               {...register("username", { required: true })}
               id="loginUsername"
-              type="text"
+              type="email"
             />
           </div>
           <div className="space-y-1">
-            <Label htmlFor="Password">password</Label>
+            <Label htmlFor="loginPassword">password</Label>
             <Input
               {...register("password", { required: true })}
-              id="Password"
+              id="loginPassword"
               type="password"
             />
           </div>
