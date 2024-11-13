@@ -10,8 +10,11 @@ const io = new Server(httpServer);
 
 app.set("io", io);
 
-httpServer.listen(PORT, async () => {
-  await dbConnection();
-  console.log(`the server is running at port ${PORT}`);
-});
+const setupAndRunServer = () => {
+  httpServer.listen(PORT, async () => {
+    await dbConnection();
+    console.log(`the server is running at port ${PORT}`);
+  });
+};
 
+setupAndRunServer();
