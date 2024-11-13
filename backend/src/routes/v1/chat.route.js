@@ -10,22 +10,21 @@ import {
 } from "../../controllers/chat.controller.js";
 const router = Router();
 
-// access chats 
-router.route('/').post(accessChat)
+router
+  .route("/")
+  .post(accessChat) // access chats ✅
+  .get(fetchChat); // fetch chat ✅
 
-// fetch chat
-router.route("/").get(fetchChat);
+// create group ✅
+router
+  .route("/groups")
+  .post(createGroupChat) // create group ✅
+  .put(renameGroupChat); // rename group ✅
 
-// create group
-router.route('/group').post(createGroupChat);
+//removeFrom group ✅
+router.route("/groups/remove").put(removeUserFromGroupChat);
 
-// rename group
-router.route("/group").put(renameGroupChat);
-
-//removeFrom group
-router.route("/groupremove").put(removeUserFromGroupChat);
-
-// add to group
-router.route("/groupadd").post(addUserIntoGroupChat);
+// add to group ✅
+router.route("/groups/add").post(addUserIntoGroupChat);
 
 export default router;

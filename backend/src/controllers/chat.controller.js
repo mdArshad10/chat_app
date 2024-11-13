@@ -4,7 +4,7 @@ import { User } from "../models/user.model.js";
 import { AsyncHandler } from "../middlewares/async-handler.js";
 import { ErrorHandler } from "../utils/error.js";
 
-// @DESC: create a new chat
+// @DESC: create a new chat ✅
 // @METHOD: [POST]  /api/v1/chats
 // @ACCESS: private
 const accessChat = AsyncHandler(async (req, res, next) => {
@@ -72,19 +72,20 @@ const accessChat = AsyncHandler(async (req, res, next) => {
   }
 });
 
-// @DESC: fetch the chat data for login user
+// @DESC: fetch the chat data for login user ✅
 // @METHOD: [GET]   /api/v1/chats
 // @ACCESS: private
 const fetchChat = AsyncHandler(async (req, res, next) => {
-  const chats = await Chat.find({
-    members: { $elemMatch: { $eq: req.user._id } },
+  const { senderId } = req.body;
+  const chats = await Chat.findOne({
+    members: { $elemMatch: { $eq: senderId } }, // TODO: login user's userID
   })
     .populate("members", "-password")
     .populate("latestMessage")
     .populate("groupAdmin", "-password")
     .sort({ updatedAt: -1 });
 
-  const fullChat = await Chat.findOne({ _id: chats._id }).populate(
+  const fullChat = await Chat.findById(chats._id).populate(
     "members",
     "-password"
   );
@@ -94,11 +95,11 @@ const fetchChat = AsyncHandler(async (req, res, next) => {
   });
 });
 
-// @DESC: create a new Group chat
+// @DESC: create a new Group chat ✅
 // @METHOD: [POST]   /api/v1/chats/groups
 // @ACCESS: private
 const createGroupChat = AsyncHandler(async (req, res, next) => {
-  const { name, members } = req.body;
+  const { name, members, senderId } = req.body;
   // check the condition if user not send the name and members
 
   const users = JSON.parse(req.body.members);
@@ -116,8 +117,8 @@ const createGroupChat = AsyncHandler(async (req, res, next) => {
   const createNewGroupChat = await Chat.create({
     name,
     isGroupChat: true,
-    members,
-    groupAdmin: req.user._id,
+    members: users,
+    groupAdmin: senderId, // TODO: login user details
   });
 
   const fullChat = await Chat.findOne({ _id: createNewGroupChat._id }).populate(
@@ -130,7 +131,7 @@ const createGroupChat = AsyncHandler(async (req, res, next) => {
   });
 });
 
-// @DESC: rename the group chat
+// @DESC: rename the group chat ✅
 // @METHOD: [PUT]   /api/v1/chats/groups
 // @ACCESS: private/Admin
 const renameGroupChat = AsyncHandler(async (req, res, next) => {
@@ -157,7 +158,7 @@ const renameGroupChat = AsyncHandler(async (req, res, next) => {
 });
 
 // @DESC: remove the user from the group chat
-// @METHOD: POST   /api/v1/chats/group/remove
+// @METHOD: POST   /api/v1/chats/groups/remove
 // @ACCESS: private
 const removeUserFromGroupChat = AsyncHandler(async (req, res, next) => {
   const { userId, chatId } = req.body;
@@ -180,13 +181,13 @@ const removeUserFromGroupChat = AsyncHandler(async (req, res, next) => {
   }
   return res.status(StatusCodes.OK).json({
     success: true,
-    message: "User added to group chat successfully",
+    message: "User remove from group chat successfully",
     data: addNewUserIntoGroupChat,
   });
 });
 
-// @DESC: Add the the new member into the group
-// @METHOD: [PUT]   /api/v1/chat/group/new
+// @DESC: Add the the new member into the group ✅
+// @METHOD: [PUT]   /api/v1/chat/groups/new
 // @ACCESS: private
 const addUserIntoGroupChat = AsyncHandler(async (req, res, next) => {
   const { userId, chatId } = req.body;
