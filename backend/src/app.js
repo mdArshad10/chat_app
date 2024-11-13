@@ -22,6 +22,12 @@ app.use(
 app.use(cookieParser());
 app.use(morgan("dev"));
 
+
+app.get("/", (req,res,next)=>{
+  res.status(200).json({
+    message:"welcome to Chat App"
+  })
+})
 app.use("/api", v1Routes);
 app.use(ErrorMiddleware);
 app.use("*", (req, res, next) => {
