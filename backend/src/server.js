@@ -6,7 +6,7 @@ import { Server } from "socket.io";
 import { createServer } from "node:http";
 
 const httpServer = createServer(app);
-const io = new Server(httpServer, {});
+const io = new Server(httpServer);
 
 app.set("io", io);
 
@@ -15,4 +15,3 @@ httpServer.listen(PORT, async () => {
   console.log(`the server is running at port ${PORT}`);
 });
 
-export default httpServer;
