@@ -7,7 +7,7 @@ import {
 
 const Home = lazy(() => import("../screen/Home"));
 const Login = lazy(() => import("../screen/Login"));
-const Chat = lazy(() => import("../screen/Chat"));
+const Chat = lazy(() => import("../screen/ChatScreen"));
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

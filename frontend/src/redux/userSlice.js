@@ -22,6 +22,6 @@ export const userSlice = createSlice({
 });
 
 
-export const {  } = counterSlice.actions;
+export const {} = userSlice.actions;
 
-export default counterSlice.reducer;
+export default userSlice.reducer;
