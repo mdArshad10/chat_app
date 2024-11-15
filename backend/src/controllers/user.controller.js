@@ -17,6 +17,8 @@ const cookieOptions = {
 const createUser = AsyncHandler(async (req, res, next) => {
   const { name, email, username, bio, password } = req.body;
 
+  console.log(req.file);
+
   if (!req.file?.filename && !req.file?.path) {
     return next(new ErrorHandler("file is not found", StatusCodes.BAD_REQUEST));
   }
@@ -93,7 +95,7 @@ const getAllUser = AsyncHandler(async (req, res, next) => {
         ],
       }
     : {};
-    // check point if user is not exist then ??
+  // check point if user is not exist then ??
   const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
   return res.status(StatusCodes.OK).json({ success: true, data: users });
 });

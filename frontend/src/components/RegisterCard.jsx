@@ -14,6 +14,10 @@ import { Button } from "./ui/button";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useState } from "react";
+import { signupUser } from "../redux/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const schema = yup
   .object({
@@ -22,11 +26,11 @@ const schema = yup
     email: yup.string().email().required(),
     password: yup.string().required(),
     bio: yup.string().required(),
-    
   })
   .required();
 
 export const RegisterCard = () => {
+  const [selectedFile, setSelectedFile] = useState(null);
   const {
     register,
     handleSubmit,
@@ -37,10 +41,40 @@ export const RegisterCard = () => {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { user, loading, error } = useSelector((store) => store.user);
 
-  const handleRegisterForm = (data) => {
-    console.log(data);
+  const handleRegisterForm = async (data) => {
+    try {
+      console.log(selectedFile);
+      const formData = new FormData();
+      formData.append("avatar", selectedFile);
+      const response = await dispatch(
+        signupUser({ ...data, avatar: selectedFile })
+      ).unwrap();
+      console.log(response);
+
+      reset();
+    } catch (error) {
+      console.error(error);
+    }
   };
+
+  const handleAvatarImage = (e) => {
+    console.log(e.target.files[0]);
+
+    setSelectedFile(e.target.files[0]);
+  };
+
+  if (loading) {
+    return <div>Loading messages...</div>;
+  }
+
+  if (error) {
+    return <div>Something is wrong with fetching</div>;
+  }
+
   return (
     <form
       onSubmit={handleSubmit(handleRegisterForm)}
@@ -109,8 +143,10 @@ export const RegisterCard = () => {
           <div className="space-y-1">
             <Input
               {...register("avatar", { required: true })}
-              id="picture"
               type="file"
+              id="picture"
+              accept="image/*"
+              onChange={handleAvatarImage}
             />
             {errors && <p>{errors.root}</p>}
           </div>
