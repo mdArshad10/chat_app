@@ -11,13 +11,26 @@ const axiosInstance = axios.create({
 });
 
 const noHeaderEndpoint = ["/users/signup", "/users/login"];
+const fileUploadEndpoint = ["/users/signup"];
 
 const isPublicEndpoint = (url) => {
   return noHeaderEndpoint.some((endpoint) => url.includes(endpoint));
 };
 
+const isFileUploadEndpoint = (url) => {
+  return fileUploadEndpoint.some((endpoint) => url.includes(endpoint));
+};
+
 axiosInstance.interceptors.request.use(
   (config) => {
+    if (isFileUploadEndpoint(config.ur)) {
+      config.headers = {
+        ...config.headers,
+        "Content-Type": "multipart/form-data",
+      };
+      return config;
+    }
+
     if (isPublicEndpoint(config.url)) {
       return config;
     }
